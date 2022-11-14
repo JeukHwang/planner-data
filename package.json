@@ -10,7 +10,7 @@
         "style": "pnpm lint:fix && pnpm format",
         "build": "tsc --project ./config/build.tsconfig.json",
         "start": "node --experimental-specifier-resolution=node ./dist/index.js",
-        "st": "pnpm style && pnpm build && pnpm start",
+        "re": "pnpm style && pnpm build && pnpm start",
         "open": "explorer.exe .\\data\\raw"
     },
     "type": "module",
