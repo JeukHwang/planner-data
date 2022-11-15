@@ -54,6 +54,7 @@ AE.validate = function validate(user: User): boolean {
             AEis.융전,
             And(
                 // ASSERT - 아랫줄에 한 시도 : 자유융합전공: 12학점 이상 이수
+                // ASSERT - 자유융합전공은 문서에서 "전공"에는 해당이 안 되고 "자유융합전공"에만 해당이 되는건가?
                 lectures.dept.credit.atLeast(12)
                 // TODO 아랫줄에 한 시도 : 소속학과를 제외하고 2개 이상 학사조직의 전공교과목 중 12학점 이상 이수
                 // lectures.all.filter({dept:AE.except(), group:["전선", "전필"], not:false}).credit().atLeast(12)
