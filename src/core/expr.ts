@@ -13,7 +13,7 @@ export abstract class Expr {
             all: Lecture[];
         }
     >;
-    public static setContext(user: User, code: Dept["code"]): void {
+    public static setEnv(user: User, code: Dept["code"]): void {
         // TODO - 애초에 전역변수로 쓰여서 이미 좋은 코드는 아니다
         // TODO - private, getter로 바꿔서 수정은 못하도록 막아둠
         // TODO - static method랑 static variable이 상속되지 않으면 더 좋을 것 같다.
@@ -44,6 +44,20 @@ export abstract class Expr {
         return this.staticLecs;
     }
 
+    msg(): string {
+        return this.context.join(" ");
+    }
+    public subExpr: Expr[] = [];
+    public setSubExpr(...exprs: Expr[]) {
+        this.subExpr = exprs;
+    }
+
+    private context: string[];
+    public addContext(explanation: string) {
+        this.context.unshift(explanation);
+        this.subExpr.forEach((expr) => expr.addContext(explanation));
+    }
+
     // validate: (user: User) => boolean;
     // info: (user: User) => { msg: string };
 }
@@ -65,7 +79,10 @@ export class NumExpr extends Expr {
         this.number = number;
     }
     atLeast(n: number): BoolExpr {
-        return new BoolExpr(this.number >= n);
+        const expr: Expr =  new BoolExpr(this.number >= n);
+        this.setSubExpr(expr);
+        expr.
+        return;
     }
     atMost(n: number): BoolExpr {
         return new BoolExpr(this.number <= n);

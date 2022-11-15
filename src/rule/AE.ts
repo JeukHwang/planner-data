@@ -10,7 +10,7 @@ export const AE = {
 
 // ASSERT - 항공우주공학과 전공과목 이수요건(2016학년도 이후 입학생 학사과정용)
 AE.validate = function validate(user: User): boolean {
-    Expr.setContext(user, "AE");
+    Expr.setEnv(user, "AE");
     const AEis = Expr.user.track.isDept("AE");
     const lectures = Object.fromEntries(
         Object.entries(Expr.lectures).map(([key, value]) => [key, new LecsExpr(value)])
