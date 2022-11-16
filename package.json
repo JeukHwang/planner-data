@@ -11,6 +11,7 @@
         "build": "tsc --project ./config/build.tsconfig.json",
         "start": "node --experimental-specifier-resolution=node ./dist/index.js",
         "re": "pnpm build && pnpm start",
+        "git": "pnpm style && pnpm re",
         "open": "explorer.exe .\\data\\raw"
     },
     "type": "module",
