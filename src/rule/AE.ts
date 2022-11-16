@@ -97,7 +97,8 @@ export class AE {
                 lectures.연구.credit.atLeast(3),
                 lectures.연구
                     .filter({ code: "AE.졸업연구" })
-                    // .replaceableWith("AE.졸업연구", ["TODO 항공우주시스템셜계II의 code"]) // cannot be executed before adding data in constants.ts
+                    // TODO - the following line cannot be executed before adding data in constants.ts
+                    // .replaceableWith("AE.졸업연구", ["TODO 항공우주시스템셜계II의 code"])
                     .credit.atLeast(3)
             ),
             // TODO - 이건 어떤 의미지?
