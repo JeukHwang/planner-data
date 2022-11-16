@@ -23,7 +23,6 @@ export class UserTrack implements Track {
     }
 
     private isValid(): boolean {
-        console.log(this.융전);
         return true;
         // throw new Error("not yet implemented");
     }
