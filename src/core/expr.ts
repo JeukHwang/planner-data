@@ -1,10 +1,11 @@
 /* eslint-disable max-classes-per-file */
 
-import { Dept, Lecture, LectureGroupType } from "./type";
-import { User } from "./user";
-import { getDept, getLec, getLecs, has, sum, union } from "./util";
+import { Among, Approve, AtLeast, AtMost, Credit, Filter, Length, ReplaceableWith } from "./macro";
+import type { Dept, Expr, Lecture, LectureGroupType } from "./type";
+import type { User } from "./user";
+import { getDept, getLec, getLecs, union } from "./util";
 
-export abstract class Expr {
+export abstract class BaseExpr {
     private static staticUser: User;
     private static staticDept: Dept;
     private static staticLecs: Readonly<
@@ -44,25 +45,26 @@ export abstract class Expr {
         return this.staticLecs;
     }
 
-    msg(): string {
-        return this.context.join(" ");
-    }
-    public subExpr: Expr[] = [];
-    public setSubExpr(...exprs: Expr[]) {
-        this.subExpr = exprs;
-    }
+    public message = "";
 
-    private context: string[];
-    public addContext(explanation: string) {
-        this.context.unshift(explanation);
-        this.subExpr.forEach((expr) => expr.addContext(explanation));
+    public setMsg(msg: string) {
+        this.message = msg;
+        return this;
+    }
+    public baseMsgOn<T extends Expr>(this: T, expr: Expr): T {
+        this.message = expr.message;
+        return this;
+    }
+    public extendMsg<T extends Expr>(this: T, func: (msg: string) => string): T {
+        this.message = func(this.message);
+        return this;
     }
 
     // validate: (user: User) => boolean;
     // info: (user: User) => { msg: string };
 }
 
-export class BoolExpr extends Expr {
+export class BoolExpr extends BaseExpr {
     public readonly boolean: boolean;
 
     constructor(boolean: boolean) {
@@ -71,7 +73,7 @@ export class BoolExpr extends Expr {
     }
 }
 
-export class NumExpr extends Expr {
+export class NumExpr extends BaseExpr {
     public readonly number: number;
 
     constructor(number: number) {
@@ -79,17 +81,14 @@ export class NumExpr extends Expr {
         this.number = number;
     }
     atLeast(n: number): BoolExpr {
-        const expr: Expr =  new BoolExpr(this.number >= n);
-        this.setSubExpr(expr);
-        expr.
-        return;
+        return AtLeast(this, n);
     }
     atMost(n: number): BoolExpr {
-        return new BoolExpr(this.number <= n);
+        return AtMost(this, n);
     }
 }
 
-export class LecExpr extends Expr {
+export class LecExpr extends BaseExpr {
     public readonly lecture: Lecture;
     constructor(lecture: Lecture) {
         super();
@@ -102,9 +101,9 @@ type Option = {
     substitutes: [LecExpr, LecsExpr][];
 };
 
-export class LecsExpr extends Expr {
+export class LecsExpr extends BaseExpr {
     public readonly lectures: Lecture[];
-    private options: Option;
+    public readonly options: Option;
 
     constructor(lectures: Lecture[], options?: Option) {
         super();
@@ -112,43 +111,28 @@ export class LecsExpr extends Expr {
         this.options = options ?? { substitutes: [] };
     }
     get length(): NumExpr {
-        return new NumExpr(this.lectures.length);
+        return Length(this);
     }
     get credit(): NumExpr {
-        const basicCredit = sum(this.lectures.map((l) => l.credit));
-        const additionalCredit = sum(
-            this.options.substitutes
-                .filter(([standard, _]) => !has(this.lectures, standard.lecture)) // 수강 안 한 과목 중
-                .filter(([_, additions]) => union(Expr.lectures.all, additions.lectures).length >= 1) // 대체 가능한 과목을 들었다면
-                .map(([standard, _]) => standard.lecture.credit) // 듣지 않은 과목을 들은 것으로 처리하여 학점 부여
-        );
-        // ASSERT - 한 과목의 credit은 시간에 따라 일정 (그러나 사실 아님)
-        // ASSERT - additions의 credit은 서로 모두 동일
-        // ASSERT - standard의 credit과 additions의 credit은 모두 동일
-        return new NumExpr(basicCredit + additionalCredit);
+        return Credit(this);
     }
 
     among(lecs: Lecture["code"][] | Lecture[] | LecsExpr): LecsExpr {
-        return new LecsExpr(union(this.lectures, getLecs(lecs).lectures));
+        return Among(this, getLecs(lecs).lectures);
     }
 
     approve(lecs: Lecture["code"][] | Lecture[] | LecsExpr): LecsExpr {
-        return new LecsExpr([...this.lectures, ...getLecs(lecs).lectures], this.options);
+        return Approve(this, getLecs(lecs).lectures);
     }
 
     // TODO - lecture 속성이 충분히 갖춰진 다음 만들면 효과적일 것
     filter(query: { code?: string; codeGroup?: string; group?: string }): LecsExpr {
-        throw new Error("not yet implemented");
+        return Filter(this, query);
     }
     replaceableWith(
         standard: Lecture["code"] | Lecture | LecExpr,
         additions: Lecture["code"][] | Lecture[] | LecsExpr
     ): LecsExpr {
-        const substitutes = [
-            ...this.options.substitutes,
-            [getLec(standard), getLecs(additions)] as [LecExpr, LecsExpr],
-        ];
-        const options = { substitutes };
-        return new LecsExpr(this.lectures, options);
+        return ReplaceableWith(this, getLec(standard), getLecs(additions));
     }
 }

@@ -27,3 +27,13 @@ export interface Track {
     readonly 융전: boolean;
     isDept(code: Dept["code"]): { [key in TrackType]: BoolExpr };
 }
+
+export interface Expr {
+    message: string;
+    setMsg(msg: string): Expr;
+    baseMsgOn(expr: Expr): Expr;
+    extendMsg(func: (msg: string) => string): Expr;
+
+    // validate: (user: User) => boolean;
+    // info: (user: User) => { msg: string };
+}
