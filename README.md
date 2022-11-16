@@ -31,3 +31,15 @@ code에서 문서를 재생성 -> 그 문서를 기존 문서와 비교하자! -
 
 와 같은 주석을 넣고 싶지만 띄어쓰기가 들어가면 그 뒤로는 url로 인식되지 않는다는 문제가 존재
 따라서 url shortener 등을 사용할 필요가 있어보임
+
+
+// 알고 있는 규칙이 정확한가?
+// 알고 있는 규칙이 전부인가?
+
+Lecture를 Course로 바꾸기
+
+- macro.ts
+    - logic
+- expr.ts
+    - Expr definiton for each type
+    - property 혹은 type change를 통한 편의성 제공 <= util.ts 함수를 사용해 편의성 제공
