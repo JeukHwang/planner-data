@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+/* eslint-disable class-methods-use-this */ // TODO - erase this
 
 import { BoolExpr } from "./expr";
 import type { Dept, Lecture, Track, TrackType } from "./type";
@@ -20,8 +21,11 @@ export class UserTrack implements Track {
             throw new Error("Invalid track");
         }
     }
+
     private isValid(): boolean {
-        throw new Error("not yet implemented");
+        console.log(this.융전);
+        return true;
+        // throw new Error("not yet implemented");
     }
 
     public isDept(code: Dept["code"]): { [key in TrackType]: BoolExpr } {
