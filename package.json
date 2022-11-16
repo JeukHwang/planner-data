@@ -6,7 +6,7 @@
         "lint": "npx eslint --config ./config/.eslintrc.cjs ./src/**/*",
         "lint:fix": "npx eslint --fix --config ./config/.eslintrc.cjs ./src/**/*",
         "format:check": "npx eslint-config-prettier config/.eslintrc.cjs",
-        "format": "npx prettier --write ./src/**/*",
+        "format": "npx prettier --write ./src/**/* --config ./config/.prettierrc.cjs",
         "style": "pnpm lint:fix && pnpm format",
         "build": "tsc --project ./config/build.tsconfig.json",
         "start": "node --experimental-specifier-resolution=node ./dist/index.js",
