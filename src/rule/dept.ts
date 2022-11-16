@@ -34,7 +34,7 @@ export abstract class BaseDeptValidator {
             this.lectures[groupType].setMsg(`수강한 전체 ${this.code} ${groupType} 과목`);
         });
         (["주전", "복전", "부전", "심전", "융전"] as TrackType[]).forEach((trackType) => {
-            this.DeptIs.주전.setMsg(`${this.code}를 ${trackType}으로 선택`);
+            this.DeptIs[trackType].setMsg(`${this.code}를 ${trackType}으로 선택`);
         });
 
         this.requirements = this.setRequirements();
