@@ -10,11 +10,12 @@ type LecturesForValidation = Readonly<
 >;
 
 // ASSERT - 항공우주공학과 전공과목 이수요건(2016학년도 이후 입학생 학사과정용)
-export class BaseDeptValidator {
-    public readonly lectures: LecturesForValidation;
+export abstract class BaseDeptValidator {
     public readonly user: User;
     public readonly code: Dept["code"];
-    public readonly DeptIs: ReturnType<Track["isDept"]>;
+    protected lectures: LecturesForValidation;
+    protected DeptIs: ReturnType<Track["isDept"]>;
+    protected requirements: BoolExpr[];
 
     constructor(user: User, code: Dept["code"]) {
         this.user = user;
@@ -35,16 +36,18 @@ export class BaseDeptValidator {
         (["주전", "복전", "부전", "심전", "융전"] as TrackType[]).forEach((trackType) => {
             this.DeptIs.주전.setMsg(`${this.code}를 ${trackType}으로 선택`);
         });
+
+        this.requirements = this.setRequirements();
     }
 
-    public static get requirements(): BoolExpr[] {
-        return [];
+    protected abstract setRequirements(): BoolExpr[];
+
+    public validate(): boolean {
+        return this.requirements.every((req) => req.boolean === true);
     }
 
-    public static notice(): string[] {
-        const msgs: string[] = BaseDeptValidator.requirements
-            .filter((requirement) => requirement.boolean === false)
-            .map((requirement) => requirement.message);
+    public notice(): string[] {
+        const msgs: string[] = this.requirements.filter((req) => req.boolean === false).map((req) => req.message);
         return msgs.length === 0 ? ["Pass all"] : msgs;
     }
 }

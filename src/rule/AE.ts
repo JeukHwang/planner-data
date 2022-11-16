@@ -1,38 +1,18 @@
-import { BaseExpr, BoolExpr, LecsExpr } from "../core/expr";
+import { BaseExpr, BoolExpr } from "../core/expr";
 import { And, If, Or } from "../core/macro";
-import type { LectureGroupType } from "../core/type";
 import type { User } from "../core/user";
-
-type LecturesForValidation = Readonly<
-    { [key in LectureGroupType]: LecsExpr } & {
-        dept: LecsExpr;
-        all: LecsExpr;
-    }
->;
+import { BaseDeptValidator } from "./dept";
 
 // ASSERT - 항공우주공학과 전공과목 이수요건(2016학년도 이후 입학생 학사과정용)
-export class AE {
-    public static get requirements(): BoolExpr[] {
-        const lectures: LecturesForValidation = Object.fromEntries(
-            Object.entries(BaseExpr.lectures).map(([key, value]) => [key, new LecsExpr(value)])
-        ) as LecturesForValidation;
-        const AEis = BaseExpr.user.track.isDept("AE");
-        lectures.all.setMsg("수강한 전체 과목");
-        lectures.dept.setMsg("수강한 전체 AE 과목");
-        lectures.기선.setMsg("수강한 전체 AE 기선 과목");
-        lectures.기필.setMsg("수강한 전체 AE 기필 과목");
-        lectures.심전필.setMsg("수강한 전체 AE 심전필 과목");
-        lectures.연구.setMsg("수강한 전체 AE 연구 과목");
-        lectures.전선.setMsg("수강한 전체 AE 전선 과목");
-        lectures.전필.setMsg("수강한 전체 AE 전필 과목");
-
-        AEis.주전.setMsg("AE를 주전으로 선택");
-        AEis.복전.setMsg("AE를 복전으로 선택");
-        AEis.부전.setMsg("AE를 부전으로 선택");
-        AEis.심전.setMsg("AE를 심전으로 선택");
-        AEis.융전.setMsg("AE를 융전으로 선택");
+export class AEvalidator extends BaseDeptValidator {
+    constructor(user: User) {
+        super(user, "AE");
+    }
+    protected setRequirements(): BoolExpr[] {
+        const { lectures } = this;
+        const AEis = this.DeptIs;
         const specialLecListFor심전 = ["MAS109", "MAS201", "MAS202"];
-        const graduationRequirements: BoolExpr[] = [
+        return [
             // AE가 포함된 track: 졸업이수학점
             lectures.all.credit.atLeast(136),
             // AE가 포함된 track: 기초선택
@@ -110,19 +90,5 @@ export class AE {
             // AE Co-op 인턴십 프로그램 이수요건은 모든 재학생에게 적용한다.
             // 본 이수요건 중 공과대학에서 개설한 전공선택 교과목(CoE491코드)을 전공선택으로 인정하는 사항은 모든 재학생에게 적용한다.
         ];
-        return graduationRequirements;
-    }
-    public static validate(user: User): boolean {
-        BaseExpr.setEnv(user, "AE");
-        return AE.requirements.every((requirement) => requirement.boolean === true);
-        // TODO - give message
-    }
-
-    public static notice(user: User): string[] {
-        BaseExpr.setEnv(user, "AE");
-        return AE.requirements
-            .filter((requirement) => requirement.boolean === false)
-            .map((requirement) => requirement.message);
-        // TODO - give message
     }
 }
