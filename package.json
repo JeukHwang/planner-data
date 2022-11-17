@@ -12,7 +12,8 @@
         "start": "node --experimental-specifier-resolution=node ./dist/index.js",
         "re": "pnpm build && pnpm start",
         "git": "pnpm style && pnpm re",
-        "open": "explorer.exe .\\data\\raw"
+        "open": "explorer.exe .\\data\\raw",
+        "analyze": "tsc --project ./config/analysis.tsconfig.json && node --experimental-specifier-resolution=node ./dist/analysis.js"
     },
     "type": "module",
     "author": "Jeuk Hwang",

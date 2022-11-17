@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "rootDir": "../data",
+        "outDir": "../dist",
+        "types": ["node"]
+    },
+    "include": [
+        "../data/analysis.ts"
+    ],
+    "extends": "./base.tsconfig.json"
+}
