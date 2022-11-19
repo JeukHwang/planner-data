@@ -132,3 +132,5 @@ dist
 # Custom
 otldump*.json
 dumps
+legacy
+test
