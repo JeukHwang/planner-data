@@ -24,10 +24,11 @@ module.exports = {
         // "no-multiple-empty-lines": ["error", { max: 2, maxEOF: 1 }],
         // "object-curly-newline": ["error", { multiline: true }],
         // semi: ["error", "always"],
-        "max-len": ["warn", { code: 120 }],
+        "max-len": ["warn", { code: 125 }],
+        // REASON for 125: prettier often make longer lines(e.g. 121 length) => max-len with 120 causes too much warning
         // quotes: ["error", "double"],
         "quotes": ["error", "double", { "avoidEscape": true, "allowTemplateLiterals": false }]
 
     },
-    settings: { "import/resolver": { node: { extensions: [".js", ".jsx", ".ts", ".tsx"] } } },
+    settings: { "import/resolver": { node: { extensions: [".js", ".jsx", ".ts", ".tsx", ".d.ts"] } } },
 };
