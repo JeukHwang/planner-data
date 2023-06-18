@@ -41,6 +41,7 @@ export class UserTrack implements Track {
 export class User {
     public readonly lectures: Lecture[];
     public readonly track: Track;
+    /** 봄학기 신입생, 가을학기 신입생 구분을 위해 0.5 단위를 사용 */
     public readonly year: number;
 
     constructor(lectures: Lecture[], track: Track, year: number) {

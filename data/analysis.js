@@ -65,6 +65,7 @@ function toSimple(s) {
 function creditChangeOverTimeForSameCode() {
     const simpleLectures = subjects
         .filter((s) => s.model === "subject.lecture")
+        .filter((s) => s.fields.year >= 2016)
         .map((s) => {
             return { code: s.fields.old_code, credit: s.fields.credit, year: `${s.fields.year}-${s.fields.semester}` };
         });
@@ -100,9 +101,11 @@ function analyze() {
     // Lecture = new Course(); // Lecture는 특정 시간에 특정 사람에 의해 열린 Course
 
     const subjectsKey = getKeyIfCommon(subjects);
+    console.log(subjectsKey);
     assert.ok(subjectsKey.has("model"));
 
     const subjectsModelKey = getValue(subjects, "model");
+    console.log(subjectsModelKey);
     assert.ok(subjectsModelKey.has("subject.course"));
     assert.ok(subjectsModelKey.has("subject.lecture"));
 
@@ -122,10 +125,23 @@ function analyze() {
     // console.log(classifyCount(fields(courses, "latest_written_datetime"))); // lastest_written_datetime이 왜 null인 것인가?
     // console.log(classifyCount(fields(courses, "type_en")).sort((a, b) => b[1] - a[1])); // type_en이 지나치게 세분화된 경우가 존재; 필요없는 경우...
     // console.log(lectures.filter(s => (s.fields.credit === 0 && s.fields.credit_au === 0)).length); // credit과 credit_au가 모두 0인 과목은 뭘까?
+    // creditChangeOverTimeForSameCode();
+}
+
+function make() {
+    // const courses = subjects.filter((s) => s.model === "subject.course");
+    const lectures = subjects
+        .filter((s) => s.model === "subject.lecture")
+        .filter((s) => s.fields.year >= 2016)
+        // .slice(0, 40);
+    // console.log(lectures);
+    // console.log(lectures.length);
+    console.log(classifyCount(lectures.map(l => l.fields.type_en)))
 }
 
 // analyze();
-creditChangeOverTimeForSameCode();
+make();
+
 
 // SU인가?
 // const SU = subjects

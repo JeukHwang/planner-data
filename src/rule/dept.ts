@@ -9,7 +9,6 @@ type LecturesForValidation = Readonly<
     }
 >;
 
-// ASSERT - 항공우주공학과 전공과목 이수요건(2016학년도 이후 입학생 학사과정용)
 export abstract class BaseDeptValidator {
     public readonly user: User;
     public readonly code: Dept["code"];

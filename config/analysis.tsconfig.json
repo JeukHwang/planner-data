@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
-        "rootDir": "../data",
+        "resolveJsonModule": true,
+        "rootDir": "../src",
         "outDir": "../dist",
         "types": ["node"]
     },
     "include": [
-        "../data/analysis.ts"
+        "../src/analysis/index.ts"
     ],
     "extends": "./base.tsconfig.json"
 }

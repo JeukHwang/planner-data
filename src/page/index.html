@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="./style.css" rel="stylesheet">
+    <script>(function (e, t, n) { var r = e.querySelectorAll("html")[0]; r.className = r.className.replace(/(^|\s)no-js(\s|$)/, "$1js$2"); })(document, window, 0);</script>
+</head>
+
+<body>
+    <form method="post" action="https://css-tricks.com/examples/DragAndDropFileUploading//?" enctype="multipart/form-data" novalidate class="box">
+        <div class="box__input">
+            <input type="file" name="files[]" id="file" class="box__file" data-multiple-caption="{count} files selected"
+                multiple />
+            <label for="file"><strong>Choose a file</strong><span class="box__dragndrop"> or drag it
+                    here</span>.</label>
+            <button type="submit" class="box__button">Upload</button>
+        </div>
+        <div class="box__uploading">Uploading&hellip;</div>
+        <div class="box__success">Done! <a href="https://css-tricks.com/examples/DragAndDropFileUploading//?" class="box__restart" role="button">Upload more?</a></div>
+        <div class="box__error">Error! <span></span>. <a href="https://css-tricks.com/examples/DragAndDropFileUploading//?" class="box__restart" role="button">Try again!</a></div>
+    </form>
+    <script src="./source.js"></script>
+</body>
+
+</html>

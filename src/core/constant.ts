@@ -1,6 +1,6 @@
-import type { Dept, Lecture } from "./type";
+import type { Dept } from "./type";
 
-export const lecList: Lecture[] = [];
+// export const lecList: Lecture[] = [];
 
 export const deptList: Dept[] = [
     {

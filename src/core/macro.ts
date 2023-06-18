@@ -42,6 +42,10 @@ export function AtMost(expr: NumExpr, n: number): BoolExpr {
     return new BoolExpr(expr.number <= n).baseMsgOn(expr).extendMsg((msg) => `${msg} 최대 ${n}`);
 }
 
+export function Same(expr: NumExpr, n: number): BoolExpr {
+    return new BoolExpr(expr.number === n).baseMsgOn(expr).extendMsg((msg) => `${msg} 와 ${n} 같음`);
+}
+
 export function Length(expr: LecsExpr): NumExpr {
     return new NumExpr(expr.lectures.length).baseMsgOn(expr).extendMsg((msg) => `${msg}의 길이`);
 }
@@ -87,4 +91,9 @@ export function ReplaceableWith(expr: LecsExpr, standard: LecExpr, additions: Le
     return new LecsExpr(expr.lectures, options).setMsg(
         `${expr.message} 중에서 ${subMsg.join(", ")} 대체 수강이 인정될 때`
     );
+}
+
+export function Take(expr: LecsExpr, allLecs: LecsExpr): BoolExpr {
+    const contain = expr.lectures.every((lec) => has(allLecs.lectures, lec));
+    return new BoolExpr(contain).setMsg(`${expr.lectures.map((l) => l.code)}을 모두 수강 `);
 }

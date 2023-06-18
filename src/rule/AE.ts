@@ -9,14 +9,28 @@ export class AEvalidator extends BaseDeptValidator {
         super(user, "AE");
     }
     protected setRequirements(): BoolExpr[] {
-        const { lectures } = this;
-        const AEis = this.DeptIs;
+        const { lectures, DeptIs: AEis } = this;
         const specialLecListFor심전 = ["MAS109", "MAS201", "MAS202"];
         return [
             // AE가 포함된 track: 졸업이수학점
             lectures.all.credit.atLeast(136),
+
             // AE가 포함된 track: 기초선택
             If(AEis.복전, lectures.기선.credit.atLeast(6), lectures.기선.credit.atLeast(9)),
+            If(
+                Or(AEis.주전, AEis.심전, AEis.융전),
+                If(
+                    AEis.심전,
+                    And(
+                        lectures.all.among(specialLecListFor심전).length.atLeast(2),
+                        lectures.all.among(specialLecListFor심전).credit.atLeast(9)
+                    ),
+                    And(
+                        lectures.all.among(specialLecListFor심전).length.atLeast(1),
+                        lectures.all.among(specialLecListFor심전).credit.atLeast(6)
+                    )
+                )
+            ),
 
             // AE가 전공, 심화전공, 자유융합전공으로 포함된 track : 전공 // TODO 복수전공도 포함?
             If(

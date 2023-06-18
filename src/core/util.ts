@@ -1,4 +1,5 @@
-import { deptList, lecList } from "./constant";
+import { mapCodeToLecture } from "../db/util";
+import { deptList } from "./constant";
 import { LecExpr, LecsExpr } from "./expr";
 import type { Dept, Lecture } from "./type";
 
@@ -21,7 +22,8 @@ export function getLec(lec: Lecture["code"] | Lecture | LecExpr): LecExpr {
     if (isLecExpr(lec)) {
         return lec;
     }
-    const lecture = isLecCode(lec) ? lecList.find((l) => l.code === lec)! : lec;
+    // const lecture = isLecCode(lec) ? lecList.find((l) => l.code === lec)! : lec;
+    const lecture = isLecCode(lec) ? mapCodeToLecture(lec) : lec;
     return new LecExpr(lecture);
 }
 

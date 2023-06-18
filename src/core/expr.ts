@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
-import { Among, Approve, AtLeast, AtMost, Credit, Filter, Length, ReplaceableWith } from "./macro";
+import { Among, Approve, AtLeast, AtMost, Credit, Filter, Length, ReplaceableWith, Same } from "./macro";
 import type { Dept, Expr, Lecture, LectureGroupType } from "./type";
 import type { User } from "./user";
 import { getDept, getLec, getLecs, union } from "./util";
@@ -33,9 +33,9 @@ export abstract class BaseExpr {
         };
     }
 
-    static get user(): User {
-        return this.staticUser;
-    }
+    // static get user(): User {
+    //     return this.staticUser;
+    // }
 
     static get dept(): Dept {
         return this.staticDept;
@@ -86,6 +86,9 @@ export class NumExpr extends BaseExpr {
     atMost(n: number): BoolExpr {
         return AtMost(this, n);
     }
+    same(n: number): BoolExpr {
+        return Same(this, n);
+    }
 }
 
 export class LecExpr extends BaseExpr {
@@ -110,6 +113,7 @@ export class LecsExpr extends BaseExpr {
         this.lectures = lectures;
         this.options = options ?? { substitutes: [] };
     }
+
     get length(): NumExpr {
         return Length(this);
     }
